@@ -1,0 +1,42 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: eureka-server-7001
+
+#集群版
+#eureka:
+#  instance:
+#    hostname: eureka7001    #eureka服务端的实例名字
+#    prefer-ip-address: true
+#    instance-id: eureka7001
+#  client:
+#    register-with-eureka: false
+#    fetch-registry: false
+#    service-url:
+#      #设置与eureka server交互的地址查询服务和注册服务都需要依赖这个地址
+#      defaultZone: http://eureka7002:7002/eureka/  # 这个是集群版开启 互相注册
+#  server:
+##    关闭自我保护机制，保证不可用服务被及时踢除
+#    enable-self-preservation: false
+#    eviction-interval-timer-in-ms: 2000
+
+
+# 单机版
+eureka:
+  instance:
+    hostname: localhost  #eureka服务端的实例名字
+  client:
+    register-with-eureka: false    #表示不向注册中心注册自己
+    fetch-registry: false   #表示自己就是注册中心，职责是维护服务实例，并不需要去检索服务
+    service-url:
+      #设置与eureka server交互的地址查询服务和注册服务都需要依赖这个地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    # 禁用自我保护模式(保护模式主要是为了防止客户端因为网络抖动而被错误的剔除)
+    # 如果关闭了，那么心跳超时的客户端会被及时剔除
+    enable-self-preservation: false
+    # 决定多长间隔执行定时扫描“僵尸服务”，(默认是60s，单位是ms)并从注册中心中剔除它们，保证注册表干净有效
+    eviction-interval-timer-in-ms: 2000
+
