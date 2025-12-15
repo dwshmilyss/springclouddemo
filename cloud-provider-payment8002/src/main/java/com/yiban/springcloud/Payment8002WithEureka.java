@@ -8,16 +8,17 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 /**
  * @author david.duan
  * @packageName com.yiban.springcloud
- * @className OrderMain8008
- * @date 2025/6/19
+ * @className CloudProviderPayment8002
+ * @date 2025/6/20
  * @description
  */
 @SpringBootApplication
-@Slf4j
 @EnableEurekaClient
-public class OrderMain8008Application {
+@Slf4j
+public class Payment8002WithEureka {
     public static void main(String[] args) {
-        SpringApplication.run(OrderMain8008Application.class, args);
-        log.info("OrderMain8008 启动成功");
+        SpringApplication.run(Payment8002WithEureka.class, args);
+        log.info("CloudProviderPayment8002 启动成功");
     }
+
 }

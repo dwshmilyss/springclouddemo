@@ -7,15 +7,15 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * @author david.duan
  * @packageName com.yiban.springcloud
- * @className PaymentMain8004
- * @date 2025/7/3
+ * @className PaymentMain8003
+ * @date 2025/7/2
  * @description
  */
-@SpringBootApplication
 @EnableDiscoveryClient
-public class PaymentMain8004 {
+@SpringBootApplication
+public class PaymentMain8003WithZK {
     public static void main(String[] args) {
-        SpringApplication.run(PaymentMain8004.class, args);
+        SpringApplication.run(PaymentMain8003WithZK.class, args);
     }
 
 }

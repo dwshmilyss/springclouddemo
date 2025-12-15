@@ -3,19 +3,21 @@ package com.yiban.springcloud;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @author david.duan
  * @packageName com.yiban.springcloud
- * @className PaymentMain8003
- * @date 2025/7/2
+ * @className CloudProviderPayment8001Application
+ * @date 2025/6/18
  * @description
  */
-@EnableDiscoveryClient
 @SpringBootApplication
-public class PaymentMain8003 {
+@EnableEurekaClient
+@EnableDiscoveryClient
+public class Payment8001WithEureka {
     public static void main(String[] args) {
-        SpringApplication.run(PaymentMain8003.class, args);
+        SpringApplication.run(Payment8001WithEureka.class, args);
+        System.out.println("启动成功");
     }
-
 }
