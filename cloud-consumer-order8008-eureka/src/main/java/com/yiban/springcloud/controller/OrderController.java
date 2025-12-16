@@ -3,6 +3,7 @@ package com.yiban.springcloud.controller;
 import com.yiban.springcloud.entities.CommonResult;
 import com.yiban.springcloud.entities.Payment;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,19 @@ public class OrderController {
 
     @GetMapping("/consumer/payment/get/{id}")
     public CommonResult<Payment> get(@PathVariable("id") Long id) {
+        //getForObject：返回对象为响应体中数据转化的对象，一般都是JSON格式
         return restTemplate.getForObject(PAYMENT_URL + "/payment/get/" + id, CommonResult.class);
+    }
+
+    @GetMapping("/consumer/payment/get2/{id}")
+    public CommonResult<Payment> get2(@PathVariable("id") Long id) {
+        //getForEntity：返回对象是ResponseEntity对象，包含响应中的一些重要信息，比如：响应头、状态码、响应体等
+        ResponseEntity<CommonResult> responseEntity = restTemplate.getForEntity(PAYMENT_URL + "/payment/get/" + id, CommonResult.class);
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            log.info(responseEntity.getStatusCode() + "\t" + responseEntity.getHeaders());
+            return responseEntity.getBody();
+        } else {
+            return new CommonResult<>(444, "操作失败");
+        }
     }
 }

@@ -144,3 +144,18 @@ P 表示系统必须在这种情况下还保持可运行性。
 | **Spring Cloud Config**      | **AP**                      | 配置中心延迟一致       |
 | **Gateway / Ribbon / Feign** | N/A                         | 无 CAP 属性            |
 
+## Ribbon 负载均衡
+- 集中式(服务器负载均衡):就是所有的请求都会打到一个服务上(例如Nginx,或者硬件F5),再由这个服务统一分发请求
+- 进程内(本地负载均衡):在调用微服务接口时，通过组件(Ribbon)先去注册中心获取注册服务列表并缓存到本地JVM中，从而在本地实现RPC远程调用
+
+Ribbon负载均衡的实现：@LoadBalanced + RestTemplate
+```java
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+```
+RestTemplate 说明：
+1. getForObject：返回对象为响应体中数据转化的对象，一般都是JSON格式
+2. getForEntity：返回对象是ResponseEntity对象，包含响应中的一些重要信息，比如：响应头、状态码、响应体等
