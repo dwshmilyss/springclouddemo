@@ -18,7 +18,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 @Slf4j
 @EnableEurekaClient
 //这里用我自定义的负载均衡策略，name字段代表要访问的微服务，configuration代表负载均衡策略类
-//@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MySelfRule.class)
+@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MySelfRule.class)
 public class OrderMain8008WithEureka {
     public static void main(String[] args) {
         SpringApplication.run(OrderMain8008WithEureka.class, args);
