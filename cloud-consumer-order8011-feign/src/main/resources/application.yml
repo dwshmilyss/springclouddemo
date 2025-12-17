@@ -1,0 +1,41 @@
+server:
+  port: 8011
+
+spring:
+  application:
+    name: cloud-consumer-order-feign
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+#      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka
+  instance:
+    instance-id: order8011
+    prefer-ip-address: true #访问路径可以显示IP地址
+
+# 设置Feign的超时时间（OpenFeign默认支持Ribbon）
+ribbon:
+  #建立连接所用的时间(单位是毫秒),如果服务端sleep 3s，那么如果不想报错，就要把这个参数设置的大于3s
+  ReadTimeout: 4000
+  #建立连接后从服务器获取响应数据所用的时间 单位是毫秒
+  ConnectTimeout: 2000
+
+# 配置Feign的log
+logging:
+  level:
+    #Feign以什么级别监控哪个接口
+    com.yiban.springcloud.service.PaymentFeignService: debug
+    #开启这个参数后，控制台会打印详细日志，类似这样：
+#    2025-12-17 23:25:35.676 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] <--- HTTP/1.1 200 (131ms)
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] connection: keep-alive
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] content-type: application/json
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] date: Wed, 17 Dec 2025 15:25:35 GMT
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] keep-alive: timeout=4
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] proxy-connection: keep-alive
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] transfer-encoding: chunked
+#    2025-12-17 23:25:35.677 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ]
+#    2025-12-17 23:25:35.678 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] { "code": 200,"message": "select success， serverPort：8002","data": { "id": 31,"serial": "尚硅谷111" } }
+#    2025-12-17 23:25:35.678 DEBUG 74823 --- [nio-8011-exec-1] c.y.s.service.PaymentFeignService: [ PaymentFeignService#selectOne ] <--- END HTTP (101-byte body)

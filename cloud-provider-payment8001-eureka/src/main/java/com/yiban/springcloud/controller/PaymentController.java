@@ -70,6 +70,13 @@ public class PaymentController {
         return serverPort;
     }
 
+    /**
+     * 故意搞一个模拟接口超时的操作，没啥业务逻辑，就是等待3s
+     * 一般Feign都是1s内返回结果，这里故意超时
+     * 直接调用该服务是没有问题的，但是通过Feign就会报超时的异常。
+     * 对应的测试方法在     * com.yiban.springcloud.controller.OrderFeignController.getFeignTimeOut()
+     * @return
+     */
     @GetMapping("feign/timeout")
     public String getFeignTimeOut() {
         try {
