@@ -159,3 +159,30 @@ Ribbon负载均衡的实现：@LoadBalanced + RestTemplate
 RestTemplate 说明：
 1. getForObject：返回对象为响应体中数据转化的对象，一般都是JSON格式
 2. getForEntity：返回对象是ResponseEntity对象，包含响应中的一些重要信息，比如：响应头、状态码、响应体等
+---
+## consul 注册中心
+consul 是一个分布式服务注册和配置管理系统，基于 HashiCorp 开源的 Consul，是一个分布式服务发现和配置系统。
+
+启动命令：consul agent -dev
+
+consul 架构：
+- **Consul Server**：Consul 服务器，负责存储服务注册信息，并管理服务注册和注销。
+- **Consul Client**：Consul 客户端，负责向 Consul 服务器注册服务，并获取服务信息。
+- **Consul Agent**：Consul 代理，负责服务注册和发现，并代理 Consul 服务。
+- **Consul UI**：Consul 用户界面，用于查看 Consul 服务注册信息。
+- **Consul DNS**：Consul DNS，用于将服务名称解析为 IP 地址。
+- **Consul KV**：Consul 键值对，用于存储配置信息。
+- **Consul ACL**：Consul 访问控制列表，用于限制对 Consul 服务的访问。
+- **Consul Catalog**：Consul 目录，用于查看 Consul 服务注册信息。
+- **Consul Transit Gateway**：Consul 转发网关，用于将服务请求转发到其他服务。
+- **Consul Connect**：Consul 连接，用于将服务与 Consul 服务进行集成。
+- **Consul Mesh**：Consul Mesh，用于将服务集成到 Consul 中，并实现服务间通信。
+- **Consul Enterprise**：Consul 企业版，提供了更多的功能，如：服务 mesh、数据加密、访问控制等。
+- **Consul Integration**：Consul 集成，用于将 Consul 服务与第三方服务进行集成。
+- **Consul Plugin**：Consul 插件，用于扩展 Consul 功能。
+---
+## Hystrix 断路器
+### Hystrix 介绍
+- **断路器模式**：在分布式系统中，某个服务不可用时，通过断路器模式来防止整个系统的崩溃。Hystrix 是 Netflix 开发的断路器实现。
+- **隔离机制**：Hystrix 通过线程池或信号量来隔离服务调用，防止一个服务的故障影响到其他服务。
+- **降级处理**：当服务调用失败时，Hystrix 会自动执行降级策略(兜底方法)，如返回默认值或调用 fallback 方法。

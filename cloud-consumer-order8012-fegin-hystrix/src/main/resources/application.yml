@@ -23,6 +23,11 @@ ribbon:
   # 建立TCP连接所用的时间(单位是毫秒)，针对网络情况设置该参数
   ConnectTimeout: 2000
 
+# 开启Feign的Hystrix支持
+feign:
+  hystrix:
+    enabled: true
+
 # 配置Feign的log
 logging:
   level:

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 
 /**
  * @author david.duan
@@ -15,6 +16,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @SpringBootApplication
 @Slf4j
 @EnableEurekaClient
+@EnableHystrix
 public class Payment8005WithHystrix {
     public static void main(String[] args) {
         SpringApplication.run(Payment8005WithHystrix.class, args);
