@@ -2,6 +2,7 @@ package com.yiban.springcloud.service;
 
 import com.yiban.springcloud.entities.CommonResult;
 import com.yiban.springcloud.entities.Payment;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

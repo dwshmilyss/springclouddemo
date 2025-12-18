@@ -1,0 +1,17 @@
+server:
+  port: 8005
+
+spring:
+  application:
+    name: cloud-provider-payment-hystrix
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+#      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka
+  instance:
+    instance-id: payment8005
+    prefer-ip-address: true #访问路径可以显示IP地址
