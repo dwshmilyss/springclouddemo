@@ -185,4 +185,21 @@ consul 架构：
 ### Hystrix 介绍
 - **断路器模式**：在分布式系统中，某个服务不可用时，通过断路器模式来防止整个系统的崩溃。Hystrix 是 Netflix 开发的断路器实现。
 - **隔离机制**：Hystrix 通过线程池或信号量来隔离服务调用，防止一个服务的故障影响到其他服务。
-- **降级处理**：当服务调用失败时，Hystrix 会自动执行降级策略(兜底方法)，如返回默认值或调用 fallback 方法。
+- **降级处理**：当服务调用失败时(由HystrixCommand中的参数配置，在一定时间内失败次数超过配置的次数时触发熔断)，Hystrix 会自动执行降级策略(兜底方法)，如返回默认值或调用 fallback 方法。
+注意：熔断开启后如果调用服务成功，服务并不是一下就好，而是会恢复到半正常状态，需要等待一段时间后(默认5s)。熔断器会尝试再发一次请求，如果成功，则熔断器关闭。
+### 熔断器流程图
+![img_2.png](img_2.png)
+
+The following sections will explain this flow in greater detail:
+
+1. Construct a HystrixCommand or HystrixObservableCommand Object
+2. Execute the Command
+3. Is the Response Cached?
+4. Is the Circuit Open?
+5. Is the Thread Pool/Queue/Semaphore Full?
+6. HystrixObservableCommand.construct() or HystrixCommand.run()
+7. Calculate Circuit Health
+8. Get the Fallback
+9. Return the Successful Response
+### 熔断器状态转换
+![img_3.png](img_3.png)

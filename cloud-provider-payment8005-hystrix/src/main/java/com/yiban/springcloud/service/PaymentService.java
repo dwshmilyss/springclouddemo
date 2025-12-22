@@ -1,5 +1,6 @@
 package com.yiban.springcloud.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -50,11 +51,32 @@ public class PaymentService {
     }
 
     /**
-     * 全局fallback方法
+     * 全局fallback方法，配合注解 @DefaultProperties(defaultFallback = "paymentInfo_global_fallback") 一起使用
      * @return
      */
     public String paymentInfo_global_fallback() {
         return "系统繁忙，请稍后再试，全局兜底方法" ;
     }
 
+    //============上面是服务降级，下面开始服务熔断=================
+    @HystrixCommand(fallbackMethod = "paymentCircuitBreaker_fallback",commandProperties = {
+            @HystrixProperty(name = "circuitBreaker.enabled",value = "true"),//是否开启断路器
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold",value = "10"),//请求次数
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds",value = "10000"),//时间窗口期
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage",value = "60"),//失败率达到多少后跳闸
+    })
+    public String paymentCircuitBreaker(Integer id) {
+        if (id < 0) {
+            throw new RuntimeException("*****id 不能为负数");
+        }
+        String serialNumber = IdUtil.simpleUUID();
+        return Thread.currentThread().getName() + "\t" + "调用成功，流水号：" + serialNumber;
+    }
+
+    /**
+     * 即使是熔断，也需要有一个兜底的方法
+     */
+    public String paymentCircuitBreaker_fallback(Integer id) {
+        return "id 不能为负数，请稍后再试，id: " + id;
+    }
 }
