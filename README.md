@@ -203,3 +203,27 @@ The following sections will explain this flow in greater detail:
 9. Return the Successful Response
 ### 熔断器状态转换
 ![img_3.png](img_3.png)
+---
+## Gateway网关
+- **API 网关**：API 网关是一个用于处理 API 请求的代理服务器，通常用于负载均衡、认证、限流、缓存、日志记录等。
+- **API 网关和负载均衡**：API 网关通常与负载均衡一起使用，负载均衡负责将请求分发给后端服务，而 API 网关负责处理 API 请求，并返回结果。
+- **API 网关和负载均衡的比较**：
+  - 负载均衡：负载均衡负责将请求分给后端服务，通常使用轮询、权重、最少连接数等方式进行负载均衡。
+  - API 网关：API 网关负责处理 API 请求，通常使用过滤器、路由、熔断、限流、缓存、日志记录等。
+- **Spring Cloud Gateway**：Spring Cloud Gateway 是一个基于 Spring Framework 5、Spring Boot 2 和 Project Reactor 的 API 网关，提供了路由、过滤器、熔断、限流、缓存、日志记录等功能。
+- **Spring Cloud Gateway 和 Netflix Zuul 的比较**：
+  - 性能：Spring Cloud Gateway 基于 Reactor，性能更高。
+  - 功能：Spring Cloud Gateway 提供了更多的功能，如路由、过滤器、熔断、限流、缓存、日志记录等。
+  - 易用性：Spring Cloud Gateway 更易于使用，配置更简单。
+
+### Spring Cloud Gateway 的使用：
+- 添加依赖：在 pom.xml 中添加 Spring Cloud Gateway 依赖。
+```aiignore
+注意：这里不需要添加 spring-boot-starter-web 和 spring-boot-starter-actuator ，因为 Spring Cloud Gateway 已经包含了这两个依赖。否则会冲突
+```
+- 配置路由：在 application.yml 中配置路由规则。
+- 使用过滤器：使用内置过滤器或自定义过滤器处理请求。
+- 启动网关：启动 Spring Boot 应用程序，访问 API 网关
+```aiignore
+比如原来的服务地址是 http://localhost:8001/payment/get/31 ，现在改为 http://localhost:9527/payment/get/31
+```
