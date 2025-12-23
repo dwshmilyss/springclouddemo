@@ -6,16 +6,30 @@ spring:
     name: cloud-gateway9527
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true # 开启从注册中心获取路由，利用微服务名进行路由
       routes:
           - id: payment_route1 # 路由的ID，没有固定规则但要求唯一, 建议配合服务名
-            uri: http://localhost:8001
+#            uri: http://localhost:8001
+            uri: lb://cloud-payment-service
             predicates:
               - Path=/payment/get/**   #访问/payment/get/**路径时会路由到cloud-payment-service服务
           - id: payment_route2
-            uri: http://localhost:8001
-            predicates:
+#            uri: http://localhost:8001
+            uri: lb://cloud-payment-service
+            predicates: #多个断言同时满足才能路由
               - Path=/payment/lb/**   #访问/payment/get/**路径时会路由到cloud-payment-service服务
-
+#              - Before=2025-12-23T17:48:29.747+08:00[Asia/Shanghai] #断言，当前时间在指定时间之前时才路由到cloud-payment-service服务
+#              - After=2025-12-23T17:48:29.747+08:00[Asia/Shanghai] #断言，当前时间在指定时间之后时才路由到cloud-payment-service服务
+#              - Between=2025-12-23T17:48:29.747+08:00[Asia/Shanghai],2025-12-24T19:48:29.747+08:00[Asia/Shanghai] #断言，当前时间在指定时间之间时才路由到cloud-payment-service服务
+#              - Cookie=name,dww #断言，请求头Cookie中必须包含name=dww (测试命令： curl --noproxy "*" http://localhost:9527/payment/lb --cookie "name=dww")
+#              - Header=X-Request-Id, \d+ #断言，请求头Header中必须包含X-Request-Id并且值为整数(正则)。curl --noproxy "*" http://localhost:9527/payment/lb --header "X-Request-Id:123"
+#              - Host=**.example.com #断言，请求头Host中必须包含example.com
+#              - Method=GET #断言，请求方法必须是GET
+#              - Query=token,bearer #断言，请求参数Query中必须包含token=bearer
+#              - RemoteAddr=192.168.1.1/24 #断言，请求IP地址必须在指定的子网内
+#              - Weight=cloud-payment-service,100 #断言，根据服务名和权重进行路由
 
 eureka:
   client:
