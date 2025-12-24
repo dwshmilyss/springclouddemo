@@ -1,0 +1,40 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/dwshmilyss/dww-springcloud-config.git
+          username: dwshmilyss
+          password: dw8120653
+      search-paths:
+        - dww-springcloud-config
+      label: main
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+#      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka #eureka 集群版
+  instance:
+    instance-id: config3344
+    prefer-ip-address: true #访问路径可以显示IP地址
+    ip-address: 127.0.0.1
+    lease-renewal-interval-in-seconds: 1 #eureka客户端向服务端发送心跳的时间间隔，单位为秒(默认30s)
+    lease-expiration-duration-in-seconds: 2 #eureka服务端在收到最后一次心跳后等待的时间上限(默认90s)，超时将踢出
+
+#Actuator 的管理端点暴露配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" #暴露所有端点
+  endpoint:
+    health:
+      show-details: always #端点健康信息显示详细信息

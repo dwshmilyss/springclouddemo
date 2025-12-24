@@ -24,6 +24,7 @@
         <module>cloud-consumer-order8012-fegin-hystrix</module>
         <module>cloud-hystrix-monitor9001</module>
         <module>cloud-gateway-gateway9527</module>
+        <module>cloud-config-center3344</module>
     </modules>
 
     <!-- 统一管理jar包版本 -->
