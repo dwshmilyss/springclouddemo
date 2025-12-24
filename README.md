@@ -227,3 +227,51 @@ The following sections will explain this flow in greater detail:
 ```aiignore
 比如原来的服务地址是 http://localhost:8001/payment/get/31 ，现在改为 http://localhost:9527/payment/get/31
 ```
+---
+## Spring Cloud Config 配置中心
+架构图：![img_4.png](img_4.png)
+- **Spring Cloud Config 介绍**：Spring Cloud Config 是一个分布式配置管理工具，用于管理应用程序的配置信息，如数据库连接信息、缓存服务器地址、邮件服务器地址等。
+- **Spring Cloud Config 的作用**：Spring Cloud Config 允许应用程序在运行时从远程配置服务器获取配置信息，并动态更新配置信息。
+- **Spring Cloud Config 的实现原理**：Spring Cloud Config 使用 Git、Maven、Gradle 等开源工具实现，通过 Git 仓库存储配置信息，并使用 Spring Boot 创建一个配置服务器，将配置信息推送给客户端。
+- **Spring Cloud Config 的优点**：
+1. 配置管理：Spring Cloud Config 允许应用程序在运行时从远程配置服务器获取配置信息，并动态更新配置信息。
+2. 可以集中管理配置信息，一处修改，处处生效。
+### 配置中心服务端
+1. 添加依赖：在 pom.xml 中添加 Spring Cloud Config 依赖。
+```aiignore
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-config-server</artifactId>
+</dependency>
+```
+2. 创建配置文件：在 Git 仓库中创建配置文件，文件名格式为 {application}-{profile}.yml 或 {application}-{profile}.properties。
+3. 启动配置服务器：启动 Spring Boot 配置服务器，并指定 Git 仓库地址。
+4. 访问配置信息：客户端访问配置服务器，并指定环境（profile）和配置文件名称，返回配置信息。
+### 配置中心客户端
+1. 添加依赖：在 pom.xml 中添加 Spring Cloud Config 依赖。
+```aiignore
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+```
+2. 配置 bootstrap.yml：在 bootstrap.yml 中配置配置中心服务端地址、应用名称、环境和配置文件名等信息。
+```aiignore
+这里为什么要用 bootstrap.yml 呢？因为 bootstrap.yml 是在 Spring Boot 启动之前加载的，而 application.yml 是在 Spring Boot 启动之后加载的。
+借用官方的一段话：
+    As long as Spring Boot Actuator and Spring Config Client are on the classpath any Spring Boot application will try to contact a config server on http://localhost:8888, the default value of spring.cloud.config.uri. If you would like to change this default, you can set spring.cloud.config.uri in bootstrap.[yml | properties] or via system properties or environment variables.
+```
+### 动态刷新配置
+1. 添加依赖：在 pom.xml 中添加 Spring Cloud Actuator 依赖。
+2. 配置 Actuator 端点：在 application.yml 中配置 Actuator 端点，允许客户端访问和刷新配置。
+3. 在需要获取配置的类中添加 @RefreshScope 注解。
+4. 刷新配置：通过调用 Actuator 的 `/actuator/refresh` 端点来动态刷新配置。
+```aiignore
+注意：这里只需要刷新客户端的配置，不需要刷新服务端配置。(所以是刷新3355端口)
+curl --noproxy "*" -X POST http://localhost:3355/actuator/refresh  
+```
+---
+## Spring Cloud Bus 消息总线
+
+
+
