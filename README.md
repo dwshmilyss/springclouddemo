@@ -312,9 +312,12 @@ management:
       exposure:
         include: "bus-refresh" #暴露bus刷新配置的端点，配合rabbitMQ使用
         
-4. 在git中修改配置，然后手动触发一下配置更新：
+4. 在git中修改配置，然后手动触发一下配置更新(全局更新，刷新所有客户端的配置)：
 curl --noproxy "*" -X POST http://localhost:3344/actuator/bus-refresh
 这时可以看到3355和3366都自动更新了配置。 
+5. 如果想实现定点更新，而不是全局更新，那么只需要通知指定的客户端即可(比如只刷新3355客户端的配置)：
+curl --noproxy "*" -X POST http://localhost:3344/actuator/bus-refresh/cloud-config-client:3355
+注意：这里的cloud-config-client是服务名，即spring.application.name的值。
 ```
 
 - **Spring Cloud Bus 介绍**：Spring Cloud Bus 是一个消息总线，用于在 Spring Cloud 应用之间进行消息传递。它可以实现应用之间的通信，如配置更新、服务注册、服务调用等。
