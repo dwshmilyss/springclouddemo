@@ -282,8 +282,11 @@ curl --noproxy "*" -X POST http://localhost:3355/actuator/refresh
 1. 打破了微服务的职责单一性，因为像3355和3366这样的微服务本身是提供业务服务的，它们应该只处理业务逻辑，而不应该处理配置更新。
 2. 破坏了微服务各节点的对等性
 3. 有一定的局限性。比如：微服务在迁移时，他的网络地址经常发生变化，此时想做到配置更新，必须知道服务节点的IP和端口，但是IP和端口经常变化，所以就无法实现。
-实现步骤：
+实现步骤：(因为消息总线依赖消息中间件，这里我们用的是rabbitMQ，所以要先把rabbitMQ安装好，我这里用的是docker安装的)
 ```aiignore
+docker安装rabbitMQ：docker run -d  --name rabbitmq  -p 5672:5672   -p 15672:15672  -e RABBITMQ_DEFAULT_USER=admin   -e RABBITMQ_DEFAULT_PASS=admin   rabbitmq:3.13-management
+可以把admin改为guest，因为webui登录默认就是guest
+
 1. 在配置中心服务端添加依赖：
 <dependency>
     <groupId>org.springframework.cloud</groupId>
@@ -313,7 +316,6 @@ management:
 curl --noproxy "*" -X POST http://localhost:3344/actuator/bus-refresh
 这时可以看到3355和3366都自动更新了配置。 
 ```
-
 
 - **Spring Cloud Bus 介绍**：Spring Cloud Bus 是一个消息总线，用于在 Spring Cloud 应用之间进行消息传递。它可以实现应用之间的通信，如配置更新、服务注册、服务调用等。
 - **Spring Cloud Bus 的作用**：Spring Cloud Bus 允许应用程序在运行时从远程消息总线获取消息，并动态更新配置信息。
