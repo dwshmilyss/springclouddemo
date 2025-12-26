@@ -272,6 +272,58 @@ curl --noproxy "*" -X POST http://localhost:3355/actuator/refresh
 ```
 ---
 ## Spring Cloud Bus 消息总线
+架构图：![img_5.png](img_5.png)
+对应设计思想：利用消息总线触发一个客户端/bus/refresh,从而刷新所有客户端的配置。
+---
+能干嘛：![img_6.png](img_6.png)
+对应设计思想：利用消息总线触发一个服务端ConfigServer的/bus/refresh,从而刷新所有客户端的配置。
 
+要实现(更新git仓库中的配置文件,从而触发所有客户端的配置更新)这一需求，显然这个设计思想更加适合，那么为什么第一种不适合呢？原因有三：
+1. 打破了微服务的职责单一性，因为像3355和3366这样的微服务本身是提供业务服务的，它们应该只处理业务逻辑，而不应该处理配置更新。
+2. 破坏了微服务各节点的对等性
+3. 有一定的局限性。比如：微服务在迁移时，他的网络地址经常发生变化，此时想做到配置更新，必须知道服务节点的IP和端口，但是IP和端口经常变化，所以就无法实现。
+实现步骤：
+```aiignore
+1. 在配置中心服务端添加依赖：
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+</dependency>
+2. 在3355和3366两个需要刷新配置的客户端添加依赖：
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+</dependency>
+3. 配置消息总线：在 application.yml 中配置消息总线，并指定消息总线类型、RabbitMQ 地址、队列名称等信息。
+  #rabbitMQ 配置
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+ 还有
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "bus-refresh" #暴露bus刷新配置的端点，配合rabbitMQ使用
+        
+4. 在git中修改配置，然后手动触发一下配置更新：
+curl --noproxy "*" -X POST http://localhost:3344/actuator/bus-refresh
+这时可以看到3355和3366都自动更新了配置。 
+```
+
+
+- **Spring Cloud Bus 介绍**：Spring Cloud Bus 是一个消息总线，用于在 Spring Cloud 应用之间进行消息传递。它可以实现应用之间的通信，如配置更新、服务注册、服务调用等。
+- **Spring Cloud Bus 的作用**：Spring Cloud Bus 允许应用程序在运行时从远程消息总线获取消息，并动态更新配置信息。
+- **Spring Cloud Bus 的实现原理**：Spring Cloud Bus 使用 RabbitMQ、Kafka 等开源工具实现，通过 RabbitMQ 队列或 Kafka 主题存储消息，并使用 Spring Boot 创建一个消息总线，将消息推送给客户端。
+- **Spring Cloud Bus 的优点**：
+  - 配置管理：Spring Cloud Bus 允许应用程序在运行时从远程消息总线获取消息，并动态更新配置信息。
+  - 服务注册：Spring Cloud Bus 可以实现服务注册，即服务注册中心可以自动注册和发现服务。
+  - 服务调用：Spring Cloud Bus 可以实现服务调用，即服务 A 可以调用服务 B 的接口，并自动将服务 B 的配置信息传递给服务 A。
+  - 集成测试：Spring Cloud Bus 可以实现集成测试，即测试环境可以模拟生产环境，并使用 Spring Cloud Bus 进行消息传递。
+  - 集成开发：Spring Cloud Bus 可以实现集成开发，即开发环境可以模拟生产环境，并使用 Spring Cloud Bus 进行消息传递。
+  - 集成部署：Spring Cloud Bus 可以实现集成部署，即生产环境可以模拟开发环境，并使用 Spring Cloud Bus 进行消息传递。
 
 

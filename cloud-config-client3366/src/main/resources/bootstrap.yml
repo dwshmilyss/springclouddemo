@@ -1,5 +1,5 @@
 server:
-  port: 3355
+  port: 3366
 
 spring:
   application:
@@ -19,6 +19,7 @@ spring:
     username: admin
     password: admin
 
+
 eureka:
   client:
     register-with-eureka: true
@@ -27,7 +28,7 @@ eureka:
       defaultZone: http://localhost:7001/eureka
 #      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka #eureka 集群版
   instance:
-    instance-id: config-client3355
+    instance-id: config-client3366
     prefer-ip-address: true #访问路径可以显示IP地址
     ip-address: 127.0.0.1
     lease-renewal-interval-in-seconds: 1 #eureka客户端向服务端发送心跳的时间间隔，单位为秒(默认30s)
