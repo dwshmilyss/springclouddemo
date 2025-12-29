@@ -204,7 +204,7 @@ The following sections will explain this flow in greater detail:
 ### 熔断器状态转换
 ![img_3.png](img/img_3.png)
 ---
-## Gateway网关
+## Gateway 网关
 - **API 网关**：API 网关是一个用于处理 API 请求的代理服务器，通常用于负载均衡、认证、限流、缓存、日志记录等。
 - **API 网关和负载均衡**：API 网关通常与负载均衡一起使用，负载均衡负责将请求分发给后端服务，而 API 网关负责处理 API 请求，并返回结果。
 - **API 网关和负载均衡的比较**：
@@ -331,7 +331,7 @@ curl --noproxy "*" -X POST http://localhost:3344/actuator/bus-refresh/cloud-conf
   - 集成开发：Spring Cloud Bus 可以实现集成开发，即开发环境可以模拟生产环境，并使用 Spring Cloud Bus 进行消息传递。
   - 集成部署：Spring Cloud Bus 可以实现集成部署，即生产环境可以模拟开发环境，并使用 Spring Cloud Bus 进行消息传递。
 ---
-## Spring Cloud Stream
+## Spring Cloud Stream(消息驱动)
 架构图：![img_7.png](img/img_7.png)
 相关组件：![img_8.png](img/img_8.png)
 ```aiignore
@@ -379,4 +379,9 @@ spring:
 @EnableBinding(Source.class)  用于生产者
 @EnableBinding(Sink.class)   用于消费者               
 ```
-## 
+---
+## Seluth(链路调用追踪)
+- **Seluth 介绍**：Seluth 是一个开源的链路调用追踪工具，它可以帮助开发人员快速定位问题，并提高系统的性能。
+- **Seluth 的作用**：Seluth 可以帮助开发人员快速定位问题，并提高系统的性能。
+- **Seluth 的实现原理**：Seluth 使用了 Zipkin 和 Jaeger 等开源工具实现，通过 Zipkin 存储链路调用信息，并通过 Jaeger 提供可视化界面。
+---
