@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: cloud-stream-rabbitmq-consumer
+  # stream相关配置
+  cloud:
+    stream:
+      binders: # 定义消息队列
+        defaultRabbit: #绑定名称
+          type:  rabbit #消息队列类型
+          environment: # 指定rabbitmq的环境
+            spring:
+              rabbitmq:
+                  host: localhost
+                  port: 5672
+                  username: admin
+                  password: admin
+      bindings: # 定义消息通道
+        input: #消息通道的名称
+          destination: studyExchange
+          content-type: application/json
+          binder: defaultRabbit # 指定消息队列
+          group: group-1 #8802和8803两个消费者的group必须一致，不然就会重复消费消息，这和kakfa的原理一样，而且group还有持久化消息的作用，如果不配，会导致消息丢失
+#      rabbit:  #这个配置不需要了，之前是2个consumer有一个老是连不上才配置这个的，后来解决了
+#        bindings:
+#          input:
+#            consumer:
+#              declareExchange: false
+#              exchangeType: topic
+#              bindingRoutingKey: "#"
+#              durableSubscription: true
+
+server:
+  port: 8802
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  #      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka #eureka 集群版
+  instance:
+    instance-id: consumer8802
+    prefer-ip-address: true #访问路径可以显示IP地址
+    ip-address: 127.0.0.1
+
+
+management:
+  health:
+    rabbit:
+      enabled: false

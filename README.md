@@ -14,8 +14,8 @@
 -Dspring.devtools.livereload.enabled=true
 ```
 3. 在主启动类的配置中
-![img_1.png](img_1.png)
-![img.png](img.png)
+![img_1.png](img/img_1.png)
+![img.png](img/img.png)
 ---
 ## CAP
 
@@ -188,7 +188,7 @@ consul 架构：
 - **降级处理**：当服务调用失败时(由HystrixCommand中的参数配置，在一定时间内失败次数超过配置的次数时触发熔断)，Hystrix 会自动执行降级策略(兜底方法)，如返回默认值或调用 fallback 方法。
 注意：熔断开启后如果调用服务成功，服务并不是一下就好，而是会恢复到半正常状态，需要等待一段时间后(默认5s)。熔断器会尝试再发一次请求，如果成功，则熔断器关闭。
 ### 熔断器流程图
-![img_2.png](img_2.png)
+![img_2.png](img/img_2.png)
 
 The following sections will explain this flow in greater detail:
 
@@ -202,7 +202,7 @@ The following sections will explain this flow in greater detail:
 8. Get the Fallback
 9. Return the Successful Response
 ### 熔断器状态转换
-![img_3.png](img_3.png)
+![img_3.png](img/img_3.png)
 ---
 ## Gateway网关
 - **API 网关**：API 网关是一个用于处理 API 请求的代理服务器，通常用于负载均衡、认证、限流、缓存、日志记录等。
@@ -229,7 +229,7 @@ The following sections will explain this flow in greater detail:
 ```
 ---
 ## Spring Cloud Config 配置中心
-架构图：![img_4.png](img_4.png)
+架构图：![img_4.png](img/img_4.png)
 - **Spring Cloud Config 介绍**：Spring Cloud Config 是一个分布式配置管理工具，用于管理应用程序的配置信息，如数据库连接信息、缓存服务器地址、邮件服务器地址等。
 - **Spring Cloud Config 的作用**：Spring Cloud Config 允许应用程序在运行时从远程配置服务器获取配置信息，并动态更新配置信息。
 - **Spring Cloud Config 的实现原理**：Spring Cloud Config 使用 Git、Maven、Gradle 等开源工具实现，通过 Git 仓库存储配置信息，并使用 Spring Boot 创建一个配置服务器，将配置信息推送给客户端。
@@ -272,10 +272,10 @@ curl --noproxy "*" -X POST http://localhost:3355/actuator/refresh
 ```
 ---
 ## Spring Cloud Bus 消息总线
-架构图：![img_5.png](img_5.png)
+架构图：![img_5.png](img/img_5.png)
 对应设计思想：利用消息总线触发一个客户端/bus/refresh,从而刷新所有客户端的配置。
 ---
-能干嘛：![img_6.png](img_6.png)
+能干嘛：![img_6.png](img/img_6.png)
 对应设计思想：利用消息总线触发一个服务端ConfigServer的/bus/refresh,从而刷新所有客户端的配置。
 
 要实现(更新git仓库中的配置文件,从而触发所有客户端的配置更新)这一需求，显然这个设计思想更加适合，那么为什么第一种不适合呢？原因有三：
@@ -330,5 +330,53 @@ curl --noproxy "*" -X POST http://localhost:3344/actuator/bus-refresh/cloud-conf
   - 集成测试：Spring Cloud Bus 可以实现集成测试，即测试环境可以模拟生产环境，并使用 Spring Cloud Bus 进行消息传递。
   - 集成开发：Spring Cloud Bus 可以实现集成开发，即开发环境可以模拟生产环境，并使用 Spring Cloud Bus 进行消息传递。
   - 集成部署：Spring Cloud Bus 可以实现集成部署，即生产环境可以模拟开发环境，并使用 Spring Cloud Bus 进行消息传递。
-
-
+---
+## Spring Cloud Stream
+架构图：![img_7.png](img/img_7.png)
+相关组件：![img_8.png](img/img_8.png)
+```aiignore
+最重要的一点就是：stream可以提供的上层的抽象，可以屏蔽底层的消息组件，如果使用stream，那么就不需要考虑底层的消息组件(kafka or rabbitMQ)，只需要关注消息的消费和发送即可。
+```
+- **Spring Cloud Stream 介绍**：Spring Cloud Stream 是一个用于构建消息驱动微服务的框架。它提供了一个简单的编程模型，用于处理消息的生产和消费。
+- **Spring Cloud Stream 的作用**：Spring Cloud Stream 允许应用程序在运行时从远程消息总线获取消息，并动态处理消息。
+- **Spring Cloud Stream 的实现原理**：Spring Cloud Stream 使用 RabbitMQ、Kafka 等开源工具实现，通过 RabbitMQ 队列或 Kafka 主题存储消息，并使用 Spring Boot 创建一个消息总线，将消息推送给客户端。
+- **Spring Cloud Stream 的优点**：
+  - 消息驱动：Spring Cloud Stream 允许应用程序在运行时从远程消息总线获取消息，并动态处理消息。
+  - 简单编程模型：Spring Cloud Stream 提供了一个简单的编程模型，用于处理消息的生产和消费。
+### 使用方法
+```aiignore
+1. 添加依赖：
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+</dependency>
+2. 在application.yml中配置消息总线，并指定消息总线类型、RabbitMQ 地址、队列名称等信息。
+spring:
+    cloud:
+        stream:
+          cloud:
+            stream:
+              binders: # 定义消息队列
+                defaultRabbit: #绑定名称
+                  type:  rabbit #消息队列类型
+                  environment: # 指定rabbitmq的环境
+                    spring:
+                      rabbitmq:
+                          host: localhost
+                          port: 5672
+                          username: admin
+                          password: admin
+            bindings:
+                input:
+                    destination: test-queue
+                    group: test-group
+                    content-type: application/json
+                output:
+                    destination: test-queue
+                    content-type: application/json
+                    group: test-group
+3.在对应的业务类中添加注解  
+@EnableBinding(Source.class)  用于生产者
+@EnableBinding(Sink.class)   用于消费者               
+```
+## 

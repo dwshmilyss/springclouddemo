@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: cloud-stream-rabbitmq-producer
+  # stream相关配置
+  cloud:
+    stream:
+      binders: # 定义消息队列
+        defaultRabbit: #绑定名称
+          type:  rabbit #消息队列类型
+          environment: # 指定rabbitmq的环境
+            spring:
+              rabbitmq:
+                  host: localhost
+                  port: 5672
+                  username: admin
+                  password: admin
+      bindings: # 定义消息通道
+        output: #消息通道的名称
+          destination: studyExchange
+          content-type: application/json
+          binder: defaultRabbit # 指定消息队列
+
+server:
+  port: 8801
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  #      defaultZone: http://eureka7001:7001/eureka,http://eureka7002:7002/eureka #eureka 集群版
+  instance:
+    instance-id: producer8801
+    prefer-ip-address: true #访问路径可以显示IP地址
+    ip-address: 127.0.0.1
+    lease-renewal-interval-in-seconds: 1 #eureka客户端向服务端发送心跳的时间间隔，单位为秒(默认30s)
+    lease-expiration-duration-in-seconds: 2 #eureka服务端在收到最后一次心跳后等待的时间上限(默认90s)，超时将踢出
+
+
+management:
+  health:
+    rabbit:
+      enabled: false
