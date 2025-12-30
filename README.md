@@ -385,3 +385,27 @@ spring:
 - **Seluth 的作用**：Seluth 可以帮助开发人员快速定位问题，并提高系统的性能。
 - **Seluth 的实现原理**：Seluth 使用了 Zipkin 和 Jaeger 等开源工具实现，通过 Zipkin 存储链路调用信息，并通过 Jaeger 提供可视化界面。
 ---
+## Spring Cloud Alibaba Nacos (服务注册与配置管理)
+- **Spring Cloud Alibaba Nacos 介绍**：Spring Cloud Alibaba Nacos 是一个开源的云原生服务注册与配置管理平台。它提供了服务注册、服务发现、配置管理、服务 mesh、服务网关、负载均衡等功能。
+- **Spring Cloud Alibaba Nacos 的作用**：Spring Cloud Alibaba Nacos 可以帮助开发人员快速实现服务注册与配置管理。
+- **Spring Cloud Alibaba Nacos 的实现原理**：Spring Cloud Alibaba Nacos 使用了 Nacos 和 Spring Boot 创建一个服务注册中心，并通过 Nacos 存储服务信息，并通过 Spring Boot 创建一个配置中心，并通过 Nacos 存储配置信息。
+### 使用步骤：
+1. 安装nacos：https://nacos.io/zh-cn/docs/quick-start.html
+2. 添加依赖
+```aiignore
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+```
+3. 配置注册中心
+```aiignore
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+```
+4. 添加注解 @EnableDiscoveryClient
+### nacos的使用姿势
+![img_9.png](img.png)

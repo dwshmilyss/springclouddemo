@@ -1,0 +1,20 @@
+server:
+  port: 8013
+spring:
+  application:
+    name: nacos-payment-consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+#        username: nacos
+#        password: nacos
+
+server-url:
+  nacos-server-url: http://nacos-payment-provider
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
