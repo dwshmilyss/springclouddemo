@@ -33,6 +33,7 @@
         <module>cloud-provider-payment9001-nacos</module>
         <module>cloud-provider-payment9002-nacos</module>
         <module>cloud-consumer-order8013-nacos</module>
+        <module>cloud-nacos-config-center4433</module>
     </modules>
 
     <!-- 统一管理jar包版本 -->

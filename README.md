@@ -408,4 +408,6 @@ spring:
 ```
 4. 添加注解 @EnableDiscoveryClient
 ### nacos的使用姿势
-![img_9.png](img.png)
+![img_9.png](img/img_9.png)
+### nacos配置中心的架构
+![img_9.png](img/img_10.png)
