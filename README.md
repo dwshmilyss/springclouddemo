@@ -411,3 +411,52 @@ spring:
 ![img_9.png](img/img_9.png)
 ### nacos配置中心的架构
 ![img_9.png](img/img_10.png)
+### nacos 集群架构图
+![img_11.png](img/img_11.png)
+---
+## sentinel(流量控制)
+- **Sentinel 介绍**：Sentinel 是一个开源的流控组件，它可以帮助开发人员快速实现流量控制。
+- **Sentinel 的实现原理**：Sentinel 使用了 Nacos 和 Spring Boot 创建一个服务注册中心，并通过 Nacos 存储服务信息，并通过 Spring Boot 创建一个配置中心，并通过 Nacos 存储配置信息。
+- **Sentinel 的使用步骤**：
+```aiignore
+1. 添加依赖：
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+2. 配置nacos和sentinel地址
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #nacos服务注册中心
+    sentinel:
+      transport:
+        dashboard: localhost:8080 #sentinel控制台地址
+        port: 8719 #sentinel控制台端口，默认8719，假如被占用会自动从8719开始递增，直到找到可用的端口为止
+3. 添加注解 @EnableDiscoveryClient
+4. 启动sentinel，其实就是运行一个jar包
+```
+### sentinel 三种流控规则
+1. 直接：超过规则直接拒绝
+2. 关联：关联其他资源的流量情况进行限流
+![img_12.png](img/img_12.png)
+如上图的配置，意思是当testb资源的调用次数超过阈值(qps=1)时，testa资源会被限流。(比如支付接口挂掉，那么订单接口也会被限流)
+3. 链路：根据调用链路进行限流
+4. warm up 预热：
+![img13.png](img/img_13.png)
+5. 排队等待
+![img14.png](img/img_14.png)
+排队等待的使用场景
+![img15.png](img/img_15.png)
+### sentinel 四种降级规则
+1. 慢调用比例：平均响应时间超过阈值，并且超过设定
+2. 

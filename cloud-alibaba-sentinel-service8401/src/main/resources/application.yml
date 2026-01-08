@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: cloud-alibaba-sentinel-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #nacos服务注册中心
+    sentinel:
+      # 必须关闭统一上下文，否则链路模式无法识别来源
+      web-context-unify: false
+      transport:
+        dashboard: localhost:8080 #sentinel控制台地址
+        port: 8719 #sentinel控制台端口，默认8719，假如被占用会自动从8719开始递增，直到找到可用的端口为止
+
+server:
+  port: 8401
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
