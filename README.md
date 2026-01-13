@@ -475,3 +475,27 @@ spring:
 - 当添加了“参数例外项”的时候：也就是对参数的特殊值进行特殊处理
   ![img21.png](img/img_21.png)
 上图的意思：当第一个参数的请求超过阈值(qps=1)时，请求会被限流，但是当第一个参数的值是"5"的时候，只有qps>=200的时候请求才会被限流。
+### SentinelResource
+- blockHandler 用来处理触发流控时的逻辑
+- fallback 用来处理异常时的逻辑
+上面两者可以同时配置，当触发流控时，会调用blockHandler，当异常时，会调用fallback
+```aiignore
+注意：
+在sentinel中，默认可以用微服务的地址作为资源名称(例如 GetMapping("/get")中的/get)，但是当配置了 SentinelResource 的时候，只有 SentinelResource 的 value 会生效，这点在做持久化的时候定义资源名称的时候需要注意
+```
+### Sentinel 配置持久化
+- **Sentinel 配置持久化的作用**：Sentinel 配置持久化可以将 Sentinel 的配置信息持久化到 Nacos 中，这样当 Sentinel 配置发生改变时，可以通过 Nacos 监听到配置的修改，并更新到 Sentinel 中。
+nacos中的配置
+```aiignore
+[
+    {
+        "resource": "customerBlockHandler", # 资源名称(SentinelResource中的value或者微服务的地址，二选一)
+        "limitApp": "default", # 应用名称(这个是默认值)
+        "grade": 1, # 阈值类型(1: QPS, 2: 线程数)
+        "count": 1, # 阈值
+        "strategy": 0, # 流控模式(0: 直接, 1: 关联, 2: 链路)
+        "controlBehavior": 0, # 流控效果(0: 快速失败, 1: Warm Up, 2: 排队等待)
+        "clusterMode": false # 集群模式(false: 否, true: 是)
+    }
+]
+```
