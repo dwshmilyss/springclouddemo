@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiban.springcloud.alibaba.dao.StorageDao">
+  <resultMap id="BaseResultMap" type="com.yiban.springcloud.alibaba.domain.Storage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="used" jdbcType="INTEGER" property="used" />
+    <result column="residue" jdbcType="INTEGER" property="residue" />
+  </resultMap>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yiban.springcloud.alibaba.domain.Storage" useGeneratedKeys="true">
+    insert into t_storage (product_id, total, used, residue)
+    values (#{productId,jdbcType=BIGINT}, #{total,jdbcType=INTEGER}, #{used,jdbcType=INTEGER},
+      #{residue,jdbcType=INTEGER})
+  </insert>
+
+  <update id="decrease">
+    update
+        t_storage
+    set
+        used = used + #{count}, residue = residue - #{count}
+    where
+        product_id = #{productId}
+  </update>
+</mapper>

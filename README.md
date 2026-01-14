@@ -443,7 +443,7 @@ spring:
         dashboard: localhost:8080 #sentinel控制台地址
         port: 8719 #sentinel控制台端口，默认8719，假如被占用会自动从8719开始递增，直到找到可用的端口为止
 3. 添加注解 @EnableDiscoveryClient
-4. 启动sentinel，其实就是运行一个jar包
+4. 启动sentinel，其实就是运行一个jar包。 java -jar ~/apps/sentinel-dashboard-1.7.0.jar
 ```
 ### sentinel 三种流控规则
 1. 直接：超过规则直接拒绝
@@ -499,3 +499,14 @@ nacos中的配置
     }
 ]
 ```
+---
+## seata(分布式事务)
+- **Seata 是一个开源的分布式事务解决方案**，它使用两阶段提交算法来保证分布式事务的完整性和一致性。
+![img22.png](img/img_22.png)
+ 上图是seata的架构图
+![img23.png](img/img_23.png)
+- **Seata 的名词解释**：
+  - **TC (Transaction Coordinator) 事务协调者**：维护全局和分支事务的状态，驱动全局事务提交或回滚。
+  - **TM (Transaction Manager) 事务管理器**：定义全局事务的范围：开始全局事务、提交或回滚全局事务。是一个全局唯一的事务编号。
+  - **RM (Resource Manager) 资源管理器**：管理分支事务，与 TC 交互，与数据源进行交互。
+### 
