@@ -509,4 +509,12 @@ nacos中的配置
   - **TC (Transaction Coordinator) 事务协调者**：维护全局和分支事务的状态，驱动全局事务提交或回滚。
   - **TM (Transaction Manager) 事务管理器**：定义全局事务的范围：开始全局事务、提交或回滚全局事务。是一个全局唯一的事务编号。
   - **RM (Resource Manager) 资源管理器**：管理分支事务，与 TC 交互，与数据源进行交互。
-### 
+### seata原理
+![img24.png](img/img_24.png)
+第一阶段加载
+
+![img25.png](img/img_25.png)
+第二阶段提交
+
+![img26.png](img/img_26.png)
+第二阶段回滚
